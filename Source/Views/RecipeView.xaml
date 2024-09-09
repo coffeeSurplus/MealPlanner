@@ -1,0 +1,275 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:MealPlanner.Source.Models"
+					xmlns:viewModel="clr-namespace:MealPlanner.Source.ViewModels">
+	<DataTemplate DataType="{x:Type viewModel:RecipeViewModel}" x:Key="RecipeView">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="200"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="50"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="1*"/>
+				</Grid.RowDefinitions>
+				<Border Grid.Row="0" Style="{StaticResource ResourceKey=Panel}">
+					<UniformGrid Columns="2">
+						<Button Content="new recipe" Command="{Binding Path=AddNewRecipeCommand}"/>
+						<ToggleButton Content="edit" IsChecked="{Binding Path=EditMode}"/>
+					</UniformGrid>
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+					<ScrollViewer>
+						<ItemsControl ItemsSource="{Binding Path=RecipeCollectionView.CollectionView}">
+							<ItemsControl.GroupStyle>
+								<GroupStyle>
+									<GroupStyle.HeaderTemplate>
+										<DataTemplate>
+											<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=Name}"/>
+										</DataTemplate>
+									</GroupStyle.HeaderTemplate>
+								</GroupStyle>
+							</ItemsControl.GroupStyle>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate DataType="{x:Type model:RecipeModel}">
+									<ToggleButton Content="{Binding Path=Title}" Command="{Binding Path=DataContext.RecipeSelectedCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}">
+										<ToggleButton.IsChecked>
+											<MultiBinding Converter="{StaticResource ResourceKey=RecipeCurrentSelected}">
+												<Binding Mode="OneWay"/>
+												<Binding Path="DataContext.CurrentRecipe" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+											</MultiBinding>
+										</ToggleButton.IsChecked>
+									</ToggleButton>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Border>
+			</Grid>
+			<Border Grid.Column="2" Style="{StaticResource ResourceKey=Panel}">
+				<Border.Visibility>
+					<MultiBinding Converter="{StaticResource ResourceKey=RecipePanelVisibility}">
+						<Binding Path="EditMode"/>
+						<Binding Path="CurrentRecipe"/>
+					</MultiBinding>
+				</Border.Visibility>
+				<ScrollViewer>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="50"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="1*"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=CurrentRecipe.Title}"/>
+						<UniformGrid Grid.Row="1" Columns="2">
+							<TextBlock Style="{StaticResource ResourceKey=Paragraph}">
+								<TextBlock.Text>
+									<MultiBinding Converter="{StaticResource ResourceKey=RecipeSubtitleText}">
+										<Binding Path="CurrentRecipe.Category"/>
+										<Binding Path="CurrentRecipe.Serves"/>
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+							<TextBlock Style="{StaticResource ResourceKey=Paragraph}">
+								<TextBlock.Text>
+									<MultiBinding Converter="{StaticResource ResourceKey=RecipeTimeText}">
+										<Binding Path="CurrentRecipe.PreparationTime"/>
+										<Binding Path="CurrentRecipe.CookingTime"/>
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+						</UniformGrid>
+						<Rectangle Grid.Row="3" Style="{StaticResource ResourceKey=Underline}"/>
+						<Grid Grid.Row="4">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="200"/>
+								<ColumnDefinition Width="25"/>
+								<ColumnDefinition Width="1*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="40"/>
+								<RowDefinition Height="1*"/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Column="0" Grid.Row="0" Text="ingredients" Style="{StaticResource ResourceKey=Header}"/>
+							<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding Path=CurrentRecipe.Ingredients}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:IngredientModel}">
+										<TextBlock Grid.Column="0" Style="{StaticResource ResourceKey=Paragraph}">
+											<TextBlock.Text>
+												<MultiBinding Converter="{StaticResource ResourceKey=RecipeIngredientText}">
+													<Binding Path="Title"/>
+													<Binding Path="Quantity"/>
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+							<TextBlock Grid.Column="2" Grid.Row="0" Text="method" Style="{StaticResource ResourceKey=Header}"/>
+							<ItemsControl Grid.Column="2" Grid.Row="1" ItemsSource="{Binding Path=CurrentRecipe.Method}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:MethodModel}">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="20"/>
+												<ColumnDefinition Width="1*"/>
+											</Grid.ColumnDefinitions>
+											<TextBlock Grid.Column="0" Text="{Binding Path=Index}" Style="{StaticResource ResourceKey=Index}"/>
+											<TextBlock Grid.Column="1" Text="{Binding Path=Step}" Style="{StaticResource ResourceKey=Paragraph}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</Grid>
+					</Grid>
+				</ScrollViewer>
+			</Border>
+			<Border Grid.Column="2" Style="{StaticResource ResourceKey=Panel}" Visibility="{Binding Path=EditMode, Converter={StaticResource ResourceKey=GeneralBoolToVisibility}}">
+				<ScrollViewer>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="90"/>
+							<RowDefinition Height="1*"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<Grid Grid.Row="0">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="100"/>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="30"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="40"/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Column="0" Grid.Row="0"  Text="*title:" Style="{StaticResource ResourceKey=Title}"/>
+							<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentRecipeTitle, UpdateSourceTrigger=PropertyChanged}"/>
+						</Grid>
+						<Grid Grid.Row="1">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="30"/>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="30"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="40"/>
+								<RowDefinition Height="40"/>
+								<RowDefinition Height="40"/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Column="0" Grid.Row="0" Text="*category:" Style="{StaticResource ResourceKey=Title}"/>
+							<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentRecipeCategory, UpdateSourceTrigger=PropertyChanged}"/>
+							<TextBlock Grid.Column="0" Grid.Row="1" Text="*serves:" Style="{StaticResource ResourceKey=Title}"/>
+							<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=CurrentRecipeServes, UpdateSourceTrigger=PropertyChanged}"/>
+							<TextBlock Grid.Column="3" Grid.Row="0" Text="*preparation time:" Style="{StaticResource ResourceKey=Title}"/>
+							<TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Path=CurrentRecipePreparationTime, UpdateSourceTrigger=PropertyChanged}"/>
+							<TextBlock Grid.Column="3" Grid.Row="1" Text="*cooking time:" Style="{StaticResource ResourceKey=Title}"/>
+							<TextBox Grid.Column="4" Grid.Row="1" Text="{Binding Path=CurrentRecipeCookingTime, UpdateSourceTrigger=PropertyChanged}"/>
+						</Grid>
+						<Grid Grid.Row="2">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="300"/>
+								<ColumnDefinition Width="1*"/>
+							</Grid.ColumnDefinitions>
+							<StackPanel Grid.Column="0">
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="5"/>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="30"/>
+									</Grid.ColumnDefinitions>
+									<TextBlock Grid.Column="0" Text="name" Style="{StaticResource ResourceKey=Title}"/>
+									<TextBlock Grid.Column="2" Text="quantity" Style="{StaticResource ResourceKey=Title}"/>
+								</Grid>
+								<ItemsControl ItemsSource="{Binding Path=CurrentRecipeIngredients}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate DataType="{x:Type model:IngredientModel}">
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="5"/>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="30"/>
+												</Grid.ColumnDefinitions>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="40"/>
+												</Grid.RowDefinitions>
+												<TextBox Grid.Column="0" Grid.Row="0" Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"/>
+												<TextBox Grid.Column="2" Grid.Row="0" Text="{Binding Path=Quantity, UpdateSourceTrigger=PropertyChanged}"/>
+												<Button Grid.Column="3" Grid.Row="0" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="125"/>
+										<ColumnDefinition Width="1*"/>
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="40"/>
+									</Grid.RowDefinitions>
+									<Button Grid.Column="1" Content="add ingredient" Command="{Binding Path=AddIngredientCommand}"/>
+								</Grid>
+							</StackPanel>
+							<StackPanel Grid.Column="1">
+								<TextBlock Text="method" Style="{StaticResource ResourceKey=Title}"/>
+								<ItemsControl ItemsSource="{Binding Path=CurrentRecipeMethod}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="30"/>
+												</Grid.ColumnDefinitions>
+												<Grid.RowDefinitions>
+													<RowDefinition Height="40"/>
+												</Grid.RowDefinitions>
+												<TextBox Grid.Column="0" Grid.Row="0" Text="{Binding Path=Step, UpdateSourceTrigger=PropertyChanged}"/>
+												<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveMethodCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="1*"/>
+										<ColumnDefinition Width="100"/>
+										<ColumnDefinition Width="1*"/>
+									</Grid.ColumnDefinitions>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="40"/>
+									</Grid.RowDefinitions>
+									<Button Grid.Column="1" Grid.Row="0" Content="add step" Command="{Binding Path=AddMethodCommand}"/>
+								</Grid>
+							</StackPanel>
+						</Grid>
+						<Grid Grid.Row="3">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="150"/>
+								<ColumnDefinition Width="150"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="40"/>
+							</Grid.RowDefinitions>
+							<Button Grid.Column="0" Grid.Row="0" Content="remove" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=RemoveRecipeCommand}" Visibility="{Binding Path=NewRecipe, Converter={StaticResource ResourceKey=GeneralBoolToVisibilityInverted}}"/>
+							<Button Grid.Column="2" Grid.Row="0" Content="cancel" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=CancelEditRecipeCommand}"/>
+							<Button Grid.Column="3" Grid.Row="0" Content="save" Style="{StaticResource ResourceKey=SaveButton}" Command="{Binding Path=SaveEditRecipeCommand}"/>
+						</Grid>
+					</Grid>
+				</ScrollViewer>
+			</Border>
+		</Grid>
+	</DataTemplate>	
+</ResourceDictionary>

@@ -1,0 +1,311 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:MealPlanner.Source.Models"
+					xmlns:viewModel="clr-namespace:MealPlanner.Source.ViewModels">
+	<DataTemplate DataType="{x:Type viewModel:MealViewModel}" x:Key="MealView">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="50"/>
+				<RowDefinition Height="10"/>
+				<RowDefinition Height="1*"/>
+			</Grid.RowDefinitions>
+			<Grid Grid.Row="0">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="50"/>
+					<ColumnDefinition Width="3*"/>
+					<ColumnDefinition Width="10"/>
+					<ColumnDefinition Width="1*"/>
+				</Grid.ColumnDefinitions>
+				<Border Grid.Column="0" Grid.ColumnSpan="2" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="50"/>
+							<ColumnDefinition Width="1*"/>
+							<ColumnDefinition Width="1*"/>
+							<ColumnDefinition Width="1*"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Grid.Column="0" Text="view:"/>
+						<RadioButton Grid.Column="1" Content="today" IsChecked="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=0}"/>
+						<RadioButton Grid.Column="2" Content="this week" IsChecked="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=1}"/>
+						<RadioButton Grid.Column="3" Content="next week" IsChecked="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=2}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Column="3" Style="{StaticResource ResourceKey=Panel}">
+					<Button Content="new meal" Command="{Binding Path=NewMealCommand}"/>
+				</Border>
+			</Grid>
+			<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+				<Grid>
+					<Grid Visibility="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToVisibility}, ConverterParameter=0}">
+						<TextBlock Text="oh no!&#x0a;&#x0a;you haven't got any meals planned for today." Style="{StaticResource ResourceKey=Header}" Visibility="{Binding Path=TodayDefaultMessageVisible, Converter={StaticResource ResourceKey=GeneralBoolToVisibility}}"/>
+						<ScrollViewer>
+							<ItemsControl ItemsSource="{Binding Path=MealTodayCollectionView.CollectionView}">
+								<ItemsControl.GroupStyle>
+									<GroupStyle>
+										<GroupStyle.HeaderTemplate>
+											<DataTemplate>
+												<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=Name}"/>
+											</DataTemplate>
+										</GroupStyle.HeaderTemplate>
+									</GroupStyle>
+								</ItemsControl.GroupStyle>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:MealModel}">
+										<StackPanel>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+												</Grid.ColumnDefinitions>
+												<TextBlock Grid.Column="0" Grid.ColumnSpan="4" Style="{StaticResource ResourceKey=Title}" Text="{Binding Path=Title, Converter={StaticResource ResourceKey=MealText}}"/>
+												<Button Grid.Column="1" Style="{StaticResource ResourceKey=AddButton}" Command="{Binding Path=DataContext.AddIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											</Grid>
+											<Border Style="{StaticResource ResourceKey=IndentPanel}">
+												<ItemsControl ItemsSource="{Binding Path=Ingredients}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate DataType="{x:Type model:IngredientModel}">
+															<Grid>
+																<Grid.ColumnDefinitions>
+																	<ColumnDefinition Width="10"/>
+																	<ColumnDefinition Width="1*"/>
+																	<ColumnDefinition Width="30"/>
+																	<ColumnDefinition Width="30"/>
+																</Grid.ColumnDefinitions>
+																<TextBlock Grid.Column="1" Grid.ColumnSpan="4" Style="{StaticResource ResourceKey=Subtitle}">
+																	<TextBlock.Text>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealIngredientText}">
+																			<Binding Path="Title"/>
+																			<Binding Path="Quantity"/>
+																		</MultiBinding>
+																	</TextBlock.Text>
+																</TextBlock>
+																<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}"/>
+																<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}">
+																	<Button.CommandParameter>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealRemoveIngredient}">
+																			<Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+																			<Binding/>
+																		</MultiBinding>
+																	</Button.CommandParameter>
+																</Button>
+															</Grid>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</Border>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+					<Grid Visibility="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToVisibility}, ConverterParameter=1}">
+						<TextBlock Text="oh no!&#x0a;&#x0a;you haven't got any meals planned for this week." Style="{StaticResource ResourceKey=Header}" Visibility="{Binding Path=ThisWeekDefaultMessageVisible, Converter={StaticResource ResourceKey=GeneralBoolToVisibility}}"/>
+						<ScrollViewer>
+							<ItemsControl ItemsSource="{Binding Path=MealThisWeekCollectionView.CollectionView}">
+								<ItemsControl.GroupStyle>
+									<GroupStyle>
+										<GroupStyle.HeaderTemplate>
+											<DataTemplate>
+												<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=Name}"/>
+											</DataTemplate>
+										</GroupStyle.HeaderTemplate>
+									</GroupStyle>
+								</ItemsControl.GroupStyle>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:MealModel}">
+										<StackPanel>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+												</Grid.ColumnDefinitions>
+												<TextBlock Grid.Column="0" Grid.ColumnSpan="4" Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=MealWeekText}">
+															<Binding Path="Category"/>
+															<Binding Path="Title"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<Button Grid.Column="1" Style="{StaticResource ResourceKey=AddButton}" Command="{Binding Path=DataContext.AddIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											</Grid>
+											<Border Style="{StaticResource ResourceKey=IndentPanel}">
+												<ItemsControl ItemsSource="{Binding Path=Ingredients}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate DataType="{x:Type model:IngredientModel}">
+															<Grid>
+																<Grid.ColumnDefinitions>
+																	<ColumnDefinition Width="10"/>
+																	<ColumnDefinition Width="1*"/>
+																	<ColumnDefinition Width="30"/>
+																	<ColumnDefinition Width="30"/>
+																</Grid.ColumnDefinitions>
+																<TextBlock Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource ResourceKey=Subtitle}">
+																	<TextBlock.Text>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealIngredientText}">
+																			<Binding Path="Title"/>
+																			<Binding Path="Quantity"/>
+																		</MultiBinding>
+																	</TextBlock.Text>
+																</TextBlock>
+																<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}"/>
+																<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}">
+																	<Button.CommandParameter>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealRemoveIngredient}">
+																			<Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+																			<Binding/>
+																		</MultiBinding>
+																	</Button.CommandParameter>
+																</Button>
+															</Grid>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</Border>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+					<Grid Visibility="{Binding Path=CurrentPageNumber, Converter={StaticResource ResourceKey=GeneralIntToVisibility}, ConverterParameter=2}">
+						<TextBlock Text="oh no!&#x0a;&#x0a;you haven't got any meals planned for next week." Style="{StaticResource ResourceKey=Header}" Visibility="{Binding Path=NextWeekDefaultMessageVisible, Converter={StaticResource ResourceKey=GeneralBoolToVisibility}}"/>
+						<ScrollViewer>
+							<ItemsControl ItemsSource="{Binding Path=MealNextWeekCollectionView.CollectionView}">
+								<ItemsControl.GroupStyle>
+									<GroupStyle>
+										<GroupStyle.HeaderTemplate>
+											<DataTemplate>
+												<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=Name}"/>
+											</DataTemplate>
+										</GroupStyle.HeaderTemplate>
+									</GroupStyle>
+								</ItemsControl.GroupStyle>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:MealModel}">
+										<StackPanel>
+											<Grid>
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="1*"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+													<ColumnDefinition Width="30"/>
+												</Grid.ColumnDefinitions>
+												<TextBlock Grid.Column="0" Grid.ColumnSpan="4" Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=MealWeekText}">
+															<Binding Path="Category"/>
+															<Binding Path="Title"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<Button Grid.Column="1" Style="{StaticResource ResourceKey=AddButton}" Command="{Binding Path=DataContext.AddIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+												<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveMealCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											</Grid>
+											<Border Style="{StaticResource ResourceKey=IndentPanel}">
+												<ItemsControl ItemsSource="{Binding Path=Ingredients}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate DataType="{x:Type model:IngredientModel}">
+															<Grid>
+																<Grid.ColumnDefinitions>
+																	<ColumnDefinition Width="10"/>
+																	<ColumnDefinition Width="1*"/>
+																	<ColumnDefinition Width="30"/>
+																	<ColumnDefinition Width="30"/>
+																</Grid.ColumnDefinitions>
+																<TextBlock Grid.Column="1" Grid.ColumnSpan="3" Style="{StaticResource ResourceKey=Subtitle}">
+																	<TextBlock.Text>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealIngredientText}">
+																			<Binding Path="Title"/>
+																			<Binding Path="Quantity"/>
+																		</MultiBinding>
+																	</TextBlock.Text>
+																</TextBlock>
+																<Button Grid.Column="2" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}" CommandParameter="{Binding}"/>
+																<Button Grid.Column="3" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=ItemsControl, AncestorLevel=2}}">
+																	<Button.CommandParameter>
+																		<MultiBinding Converter="{StaticResource ResourceKey=MealRemoveIngredient}">
+																			<Binding Path="DataContext" RelativeSource="{RelativeSource AncestorType=ItemsControl}"/>
+																			<Binding/>
+																		</MultiBinding>
+																	</Button.CommandParameter>
+																</Button>
+															</Grid>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</Border>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+				</Grid>
+			</Border>
+			<Popup IsOpen="{Binding Path=MealEditorVisible}">
+				<Border>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="320"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="*title:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentMealTitle, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="1" Text="*date:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=CurrentMealDate, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="*category:" Style="{StaticResource ResourceKey=Title}"/>
+						<UniformGrid Grid.Column="1" Grid.Row="2" Columns="3">
+							<RadioButton Content="breakfast" IsChecked="{Binding Path=CurrentMealCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=1}"/>
+							<RadioButton Content="lunch" IsChecked="{Binding Path=CurrentMealCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=2}"/>
+							<RadioButton Content="dinner" IsChecked="{Binding Path=CurrentMealCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=3}"/>
+						</UniformGrid>
+						<UniformGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3" Columns="2">
+							<Button Content="cancel" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=CancelEditMealCommand}"/>
+							<Button Content="save" Style="{StaticResource ResourceKey=SaveButton}" Command="{Binding Path=SaveEditMealCommand}"/>
+						</UniformGrid>
+					</Grid>
+				</Border>
+			</Popup>
+			<Popup IsOpen="{Binding Path=IngredientEditorVisible}">
+				<Border>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="320"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="*title:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentIngredientTitle, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="1" Text="*quantity:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=CurrentIngredientQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+						<UniformGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Columns="2">
+							<Button Content="cancel" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=CancelEditIngredientCommand}"/>
+							<Button Content="save" Style="{StaticResource ResourceKey=SaveButton}" Command="{Binding Path=SaveEditIngredientCommand}"/>
+						</UniformGrid>
+					</Grid>
+				</Border>
+			</Popup>
+		</Grid>
+	</DataTemplate>
+</ResourceDictionary>

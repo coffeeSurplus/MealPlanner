@@ -1,0 +1,166 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:MealPlanner.Source.Models"
+					xmlns:viewModel="clr-namespace:MealPlanner.Source.ViewModels">
+	<DataTemplate DataType="{x:Type viewModel:ShoppingViewModel}" x:Key="ShoppingView">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="175"/>
+			</Grid.ColumnDefinitions>
+			<Border Grid.Column="0" Style="{StaticResource ResourceKey=Panel}">
+				<Grid>
+					<TextBlock Text="aw shucks!&#x0a;&#x0a;your shopping list is empty." Style="{StaticResource ResourceKey=Header}" Visibility="{Binding Path=DefaultMessageVisible, Converter={StaticResource ResourceKey=GeneralBoolToVisibility}}"/>
+					<ScrollViewer>
+						<StackPanel>
+							<ItemsControl ItemsSource="{Binding Path=ShoppingCollectionView.CollectionView}">
+								<ItemsControl.GroupStyle>
+									<GroupStyle>
+										<GroupStyle.HeaderTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=Name}"/>
+													<TextBlock Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=Items, Converter={StaticResource ResourceKey=ShoppingCount}}"/>
+												</StackPanel>
+											</DataTemplate>
+										</GroupStyle.HeaderTemplate>
+									</GroupStyle>
+								</ItemsControl.GroupStyle>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="{x:Type model:ShoppingModel}">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="60"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="30"/>
+											</Grid.ColumnDefinitions>
+											<CheckBox Grid.Column="0" Style="{StaticResource ResourceKey=CheckButton}" IsChecked="{Binding Path=Bought}" Command="{Binding Path=DataContext.UpdateDataCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
+											<TextBlock Grid.Column="1" Style="{StaticResource ResourceKey=Title}">
+												<TextBlock.Text>
+													<MultiBinding Converter="{StaticResource ResourceKey=ShoppingTitleText}">
+														<Binding Path="Title"/>
+														<Binding Path="Quantity"/>
+													</MultiBinding>
+												</TextBlock.Text>
+											</TextBlock>
+											<TextBlock Grid.Column="2" Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=Cost, Converter={StaticResource ResourceKey=ShoppingSubtitleText}}"/>
+											<Button Grid.Column="3" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditShoppingCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											<Button Grid.Column="4" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveShoppingCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+							<TextBlock Style="{StaticResource ResourceKey=Header}" Text="{Binding Path=ShoppingCost, Converter={StaticResource ResourceKey=ShoppingCost}}" Visibility="{Binding Path=DefaultMessageVisible, Converter={StaticResource ResourceKey=GeneralBoolToVisibilityInverted}}"/>
+						</StackPanel>
+					</ScrollViewer>
+				</Grid>
+			</Border>
+			<Grid Grid.Column="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="50"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="140"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="140"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="140"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="50"/>
+				</Grid.RowDefinitions>
+				<Border Grid.Row="0" Style="{StaticResource ResourceKey=Panel}">
+					<Button Content="new item" Command="{Binding Path=NewShoppingCommand}"/>
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="sort by:"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<RadioButton Grid.Row="2" Content="category" IsChecked="{Binding Path=SortMode}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="3" Content="cost" IsChecked="{Binding Path=SortMode, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}" Command="{Binding Path=UpdateViewCommand}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Row="4" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="order by:"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<RadioButton Grid.Row="2" Content="ascending" IsChecked="{Binding Path=OrderMode}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="3" Content="descending" IsChecked="{Binding Path=OrderMode, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}" Command="{Binding Path=UpdateViewCommand}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Row="6" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="bought items:"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<RadioButton Grid.Row="2" Content="show" IsChecked="{Binding Path=ShowBought}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="3" Content="hide" IsChecked="{Binding Path=ShowBought, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}" Command="{Binding Path=UpdateViewCommand}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Row="8" Style="{StaticResource ResourceKey=Panel}">
+					<Button Content="remove bought" Command="{Binding Path=RemoveBoughtCommand}"/>
+				</Border>
+			</Grid>
+			<Popup IsOpen="{Binding Path=ShoppingEditorVisible}">
+				<Border>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="320"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="160"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="*title:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentShoppingTitle, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="1" Text="*quantity:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=CurrentShoppingQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="*cost:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Path=CurrentShoppingCost, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="*category:" Style="{StaticResource ResourceKey=Title}"/>
+						<UniformGrid Grid.Column="1" Grid.Row="3" Columns="3" Rows="4">
+							<RadioButton Content="fresh" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=1}"/>
+							<RadioButton Content="frozen" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=2}"/>
+							<RadioButton Content="meat" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=3}"/>
+							<RadioButton Content="dairy" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=4}"/>
+							<RadioButton Content="bakery" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=5}"/>
+							<RadioButton Content="ambient" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=6}"/>
+							<RadioButton Content="tinned" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=7}"/>
+							<RadioButton Content="snacks" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=8}"/>
+							<RadioButton Content="drinks" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=9}"/>
+							<RadioButton Content="household" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=10}"/>
+							<RadioButton Content="toiletries" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=11}"/>
+							<RadioButton Content="other" IsChecked="{Binding Path=CurrentShoppingCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=12}"/>
+						</UniformGrid>
+						<UniformGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="4" Columns="2">
+							<Button Content="cancel" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=CancelEditShoppingCommand}"/>
+							<Button Content="save" Style="{StaticResource ResourceKey=SaveButton}" Command="{Binding Path=SaveEditShoppingCommand}"/>
+						</UniformGrid>
+					</Grid>
+				</Border>
+			</Popup>
+		</Grid>
+	</DataTemplate>	
+</ResourceDictionary>

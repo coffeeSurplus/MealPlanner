@@ -1,0 +1,317 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:model="clr-namespace:MealPlanner.Source.Models"
+					xmlns:viewModel="clr-namespace:MealPlanner.Source.ViewModels">
+	<DataTemplate DataType="{x:Type viewModel:InventoryViewModel}" x:Key="InventoryView">
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="10"/>
+				<ColumnDefinition Width="175"/>
+			</Grid.ColumnDefinitions>
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="3*"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="2*"/>
+				</Grid.RowDefinitions>
+				<Border Grid.Row="0" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="20"/>
+							<RowDefinition Height="1*"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Style="{StaticResource ResourceKey=Header}" Text="fridge items"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<TextBlock Grid.Row="2" Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=InventoryFridgeCount, Converter={StaticResource ResourceKey=InventoryCount}}"/>
+						<ScrollViewer Grid.Row="3">
+							<ItemsControl ItemsSource="{Binding Path=InventoryFridgeCollectionView.CollectionView}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="model:InventoryModel">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="30"/>
+											</Grid.ColumnDefinitions>
+											<UniformGrid Grid.Column="0" Rows="2">
+												<TextBlock Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
+															<Binding Path="Title"/>
+															<Binding Path="Quantity"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<TextBlock Style="{StaticResource ResourceKey=Subtitle}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventorySubtitleText}">
+															<Binding Path="ExpiryDate"/>
+															<Binding Path="Opened"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+											</UniformGrid>
+											<Button Grid.Column="1" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											<Button Grid.Column="2" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="20"/>
+							<RowDefinition Height="1*"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Style="{StaticResource ResourceKey=Header}" Text="freezer items"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<TextBlock Grid.Row="2" Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=InventoryFreezerCount, Converter={StaticResource ResourceKey=InventoryCount}}"/>
+						<ScrollViewer Grid.Row="3">
+							<ItemsControl ItemsSource="{Binding Path=InventoryFreezerCollectionView.CollectionView}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="model:InventoryModel">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="30"/>
+											</Grid.ColumnDefinitions>
+											<UniformGrid Grid.Column="0" Rows="2">
+												<TextBlock Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
+															<Binding Path="Title"/>
+															<Binding Path="Quantity"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<TextBlock Style="{StaticResource ResourceKey=Subtitle}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventorySubtitleText}">
+															<Binding Path="ExpiryDate"/>
+															<Binding Path="Opened"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+											</UniformGrid>
+											<Button Grid.Column="1" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											<Button Grid.Column="2" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+			</Grid>
+			<Grid Grid.Column="2">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="1*"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="1*"/>
+				</Grid.RowDefinitions>
+				<Border Grid.Row="0" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="20"/>
+							<RowDefinition Height="1*"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Style="{StaticResource ResourceKey=Header}" Text="cupboard items"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<TextBlock Grid.Row="2" Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=InventoryCupboardCount, Converter={StaticResource ResourceKey=InventoryCount}}"/>
+						<ScrollViewer Grid.Row="3">
+							<ItemsControl ItemsSource="{Binding Path=InventoryCupboardCollectionView.CollectionView}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="model:InventoryModel">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="30"/>
+											</Grid.ColumnDefinitions>
+											<UniformGrid Grid.Column="0" Rows="2">
+												<TextBlock Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
+															<Binding Path="Title"/>
+															<Binding Path="Quantity"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<TextBlock Style="{StaticResource ResourceKey=Subtitle}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventorySubtitleText}">
+															<Binding Path="ExpiryDate"/>
+															<Binding Path="Opened"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+											</UniformGrid>
+											<Button Grid.Column="1" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											<Button Grid.Column="2" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="20"/>
+							<RowDefinition Height="1*"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Style="{StaticResource ResourceKey=Header}" Text="other items"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<TextBlock Grid.Row="2" Style="{StaticResource ResourceKey=Subtitle}" Text="{Binding Path=InventoryOtherCount, Converter={StaticResource ResourceKey=InventoryCount}}"/>
+						<ScrollViewer Grid.Row="3">
+							<ItemsControl ItemsSource="{Binding Path=InventoryOtherCollectionView.CollectionView}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate DataType="model:InventoryModel">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="1*"/>
+												<ColumnDefinition Width="30"/>
+												<ColumnDefinition Width="30"/>
+											</Grid.ColumnDefinitions>
+											<UniformGrid Grid.Column="0" Grid.ColumnSpan="3" Rows="2">
+												<TextBlock Style="{StaticResource ResourceKey=Title}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
+															<Binding Path="Title"/>
+															<Binding Path="Quantity"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+												<TextBlock Style="{StaticResource ResourceKey=Subtitle}">
+													<TextBlock.Text>
+														<MultiBinding Converter="{StaticResource ResourceKey=InventorySubtitleText}">
+															<Binding Path="ExpiryDate"/>
+															<Binding Path="Opened"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+											</UniformGrid>
+											<Button Grid.Column="1" Style="{StaticResource ResourceKey=EditButton}" Command="{Binding Path=DataContext.EditInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+											<Button Grid.Column="2" Style="{StaticResource ResourceKey=RemoveButton}" Command="{Binding Path=DataContext.RemoveInventoryCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}"/>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+			</Grid>
+			<Grid Grid.Column="4">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="50"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="180"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="140"/>
+					<RowDefinition Height="10"/>
+					<RowDefinition Height="50"/>
+				</Grid.RowDefinitions>
+				<Border Grid.Row="0" Style="{StaticResource ResourceKey=Panel}">
+					<Button Content="new item" Command="{Binding Path=NewInventoryCommand}"/>
+				</Border>
+				<Border Grid.Row="2" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="sort by:"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<RadioButton Grid.Row="2" Content="name" IsChecked="{Binding Path=SortMode, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=0}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="3" Content="expiry date" IsChecked="{Binding Path=SortMode, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=1}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="4" Content="opened" IsChecked="{Binding Path=SortMode, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=2}" Command="{Binding Path=UpdateViewCommand}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Row="4" Style="{StaticResource ResourceKey=Panel}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="10"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Row="0" Text="order by:"/>
+						<Rectangle Grid.Row="1" Style="{StaticResource ResourceKey=Underline}"/>
+						<RadioButton Grid.Row="2" Content="ascending" IsChecked="{Binding Path=OrderMode}" Command="{Binding Path=UpdateViewCommand}"/>
+						<RadioButton Grid.Row="3" Content="descending" IsChecked="{Binding Path=OrderMode, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}" Command="{Binding Path=UpdateViewCommand}"/>
+					</Grid>
+				</Border>
+				<Border Grid.Row="6" Style="{StaticResource ResourceKey=Panel}">
+					<Button Content="remove expired" Command="{Binding Path=RemoveExpiredCommand}"/>
+				</Border>
+			</Grid>
+			<Popup IsOpen="{Binding Path=InventoryEditorVisible}">
+				<Border>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="80"/>
+							<ColumnDefinition Width="320"/>
+						</Grid.ColumnDefinitions>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+							<RowDefinition Height="40"/>
+						</Grid.RowDefinitions>
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="*title:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Path=CurrentInventoryTitle, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="1" Text="*quantity:" Style="{StaticResource ResourceKey=Title}"/>
+						<TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Path=CurrentInventoryQuantity, UpdateSourceTrigger=PropertyChanged}"/>
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="*expires:" Style="{StaticResource ResourceKey=Title}"/>
+						<Grid Grid.Column="1" Grid.Row="2">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="1*"/>
+								<ColumnDefinition Width="60"/>
+							</Grid.ColumnDefinitions>
+							<TextBox Grid.Column="0" Text="{Binding Path=CurrentInventoryExpiryDate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding Path=CurrentInventoryNoExpiry, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}"/>
+							<ToggleButton Grid.Column="1" Content="n/a" IsChecked="{Binding Path=CurrentInventoryNoExpiry}"/>
+						</Grid>
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="*category:" Style="{StaticResource ResourceKey=Title}"/>
+						<UniformGrid Grid.Column="1" Grid.Row="3" Columns="4">
+							<RadioButton Content="fridge" IsChecked="{Binding Path=CurrentInventoryCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=1}"/>
+							<RadioButton Content="freezer" IsChecked="{Binding Path=CurrentInventoryCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=2}"/>
+							<RadioButton Content="cupboard" IsChecked="{Binding Path=CurrentInventoryCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=3}"/>
+							<RadioButton Content="other" IsChecked="{Binding Path=CurrentInventoryCategory, Converter={StaticResource ResourceKey=GeneralIntToRadio}, ConverterParameter=4}"/>
+						</UniformGrid>
+						<TextBlock Grid.Column="0" Grid.Row="4" Text="*opened:" Style="{StaticResource ResourceKey=Title}"/>
+						<UniformGrid Grid.Column="1" Grid.Row="4" Columns="2">
+							<RadioButton Content="unopened" IsChecked="{Binding Path=CurrentInventoryOpened, Converter={StaticResource ResourceKey=GeneralBoolToBoolInverted}}"/>
+							<RadioButton Content="opened" IsChecked="{Binding Path=CurrentInventoryOpened}"/>
+						</UniformGrid>
+						<UniformGrid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="5" Columns="2">
+							<Button Content="cancel" Style="{StaticResource ResourceKey=CancelButton}" Command="{Binding Path=CancelEditInventoryCommand}"/>
+							<Button Content="save" Style="{StaticResource ResourceKey=SaveButton}" Command="{Binding Path=SaveEditInventoryCommand}"/>
+						</UniformGrid>
+					</Grid>
+				</Border>
+			</Popup>
+		</Grid>
+	</DataTemplate>	
+</ResourceDictionary>

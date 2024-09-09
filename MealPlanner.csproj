@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net8.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ApplicationIcon>Source/Resources/Icon.ico</ApplicationIcon>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<PublishSingleFile>true</PublishSingleFile>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Remove="Source\Resources\DefaultFont.ttf" />
+		<Page Remove="Source\Styles\App.xaml" />
+		<ApplicationDefinition Include="Source\Styles\App.xaml" />
+		<Resource Include="Source\Resources\DefaultFont.ttf" />
+		<PackageReference Include="FontAwesome.Sharp" Version="6.6.0" />
+	</ItemGroup>
+</Project>
