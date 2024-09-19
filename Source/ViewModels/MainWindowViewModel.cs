@@ -1,6 +1,5 @@
 ﻿using MealPlanner.Source.Data;
 using MealPlanner.Source.MVVM;
-using MealPlanner.Source.Views;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;

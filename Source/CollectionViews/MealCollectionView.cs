@@ -8,17 +8,17 @@ namespace MealPlanner.Source.CollectionViews;
 
 internal class MealCollectionView : CollectionViewBase<MealModel>
 {
-	private readonly int min;
-	private readonly int max;
+	private readonly bool dayView;
+	private readonly int week;
 
-	public MealCollectionView(List<MealModel> list, int min, int max, bool dayView) : base(list)
+	public MealCollectionView(List<MealModel> list, int week, bool dayView) : base(list)
 	{
-		this.min = min;
-		this.max = max;
+		this.dayView = dayView;
+		this.week = week;
 		CollectionView.SortDescriptions.Add(new("Date", ListSortDirection.Ascending));
 		CollectionView.SortDescriptions.Add(new("Category", ListSortDirection.Ascending));
 		CollectionView.GroupDescriptions.Add(new PropertyGroupDescription(dayView ? "Category" : "Date", dayView ? new CollectionViewEnumConverter() : new CollectionViewMealDateConverter()));
 	}
 
-	protected override bool Filter(object parameter) => parameter is MealModel mealModel && mealModel.Date.ToRelativeDays() >= min && mealModel.Date.ToRelativeDays() < max;
+	protected override bool Filter(object parameter) => parameter is MealModel mealModel && (dayView ? mealModel.Date.ToRelativeDays() is 0 : mealModel.Date.FirstDayOfWeek().ToRelativeWeeks() == week);
 }

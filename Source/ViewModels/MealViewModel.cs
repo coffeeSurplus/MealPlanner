@@ -101,9 +101,9 @@ internal class MealViewModel : MVVMBase
 	public MealViewModel()
 	{
 		mealList = dataManager.Data;
-		MealTodayCollectionView = new(mealList, 0, 1, true);
-		MealThisWeekCollectionView = new(mealList, 0, 7, false);
-		MealNextWeekCollectionView = new(mealList, 7, 14, false);
+		MealTodayCollectionView = new(mealList, 0, true);
+		MealThisWeekCollectionView = new(mealList, 0, false);
+		MealNextWeekCollectionView = new(mealList, 1, false);
 		NewMealCommand = new(NewMeal);
 		CancelEditMealCommand = new(CancelEditMeal);
 		SaveEditMealCommand = new(SaveEditMeal);
@@ -198,7 +198,7 @@ internal class MealViewModel : MVVMBase
 	{
 		if (!string.IsNullOrWhiteSpace(CurrentMealTitle))
 		{
-			if (DateOnly.TryParse(CurrentMealDate, out DateOnly newDate) && newDate.ToRelativeDays() is >= 0 and < 14)
+			if (DateOnly.TryParse(CurrentMealDate, out DateOnly newDate) && newDate.ToRelativeDays() is >= 0 && newDate.FirstDayOfWeek().ToRelativeWeeks() is 0 or 1)
 			{
 				return true;
 			}
@@ -229,7 +229,7 @@ internal class MealViewModel : MVVMBase
 	}
 	private void UpdateData()
 	{
-		mealList.RemoveAll(x => x.Date.ToRelativeDays() is < 0 or >= 14);
+		mealList.RemoveAll(x => x.Date.ToRelativeDays() is < 0 || x.Date.FirstDayOfWeek().ToRelativeWeeks() is not 0 and not 1);
 		dataManager.UpdateData();
 		UpdateView();
 	}
@@ -239,7 +239,7 @@ internal class MealViewModel : MVVMBase
 		MealThisWeekCollectionView.UpdateView();
 		MealNextWeekCollectionView.UpdateView();
 		TodayDefaultMessageVisible = mealList.All(x => x.Date.ToRelativeDays() is not 0);
-		ThisWeekDefaultMessageVisible = mealList.All(x => x.Date.ToRelativeDays() is < 0 or >= 7);
-		NextWeekDefaultMessageVisible = mealList.All(x => x.Date.ToRelativeDays() is < 7 or >= 14);
+		ThisWeekDefaultMessageVisible = mealList.All(x => x.Date.FirstDayOfWeek().ToRelativeWeeks() is not 0);
+		NextWeekDefaultMessageVisible = mealList.All(x => x.Date.FirstDayOfWeek().ToRelativeWeeks() is not 1);
 	}
 }
