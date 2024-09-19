@@ -149,8 +149,8 @@ internal class InventoryViewModel : MVVMBase
 	{
 		if (CheckInventoryValues())
 		{
-			currentInventory.Title = CurrentInventoryTitle.ToLower();
-			currentInventory.Quantity = CurrentInventoryQuantity.ToLower();
+			currentInventory.Title = CurrentInventoryTitle.Trim().ToLower();
+			currentInventory.Quantity = CurrentInventoryQuantity.Trim().ToLower();
 			currentInventory.ExpiryDate = CurrentInventoryNoExpiry ? DateOnly.MaxValue : DateOnly.Parse(currentInventoryExpiryDate);
 			currentInventory.Category = (InventoryCategory)CurrentInventoryCategory;
 			currentInventory.Opened = CurrentInventoryOpened;

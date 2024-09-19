@@ -125,8 +125,8 @@ internal class RecipeViewModel : MVVMBase
 	{
 		if (CurrentRecipe is not null && CheckRecipeValues())
 		{
-			CurrentRecipe.Title = CurrentRecipeTitle.ToLower();
-			CurrentRecipe.Category = CurrentRecipeCategory.ToLower();
+			CurrentRecipe.Title = CurrentRecipeTitle.Trim().ToLower();
+			CurrentRecipe.Category = CurrentRecipeCategory.Trim().ToLower();
 			CurrentRecipe.PreparationTime = TimeSpan.Parse(CurrentRecipePreparationTime);
 			CurrentRecipe.CookingTime = TimeSpan.Parse(CurrentRecipeCookingTime);
 			CurrentRecipe.Serves = int.Parse(CurrentRecipeServes);
@@ -138,12 +138,12 @@ internal class RecipeViewModel : MVVMBase
 			}
 			foreach (IngredientModel ingredientModel in CurrentRecipe.Ingredients)
 			{
-				ingredientModel.Title = ingredientModel.Title.ToLower();
-				ingredientModel.Quantity = !string.IsNullOrWhiteSpace(ingredientModel.Quantity) ? ingredientModel.Quantity.ToLower() : null;
+				ingredientModel.Title = ingredientModel.Title.Trim().ToLower();
+				ingredientModel.Quantity = !string.IsNullOrWhiteSpace(ingredientModel.Quantity) ? ingredientModel.Quantity.Trim().ToLower() : null;
 			}
 			foreach (MethodModel methodModel in CurrentRecipe.Method)
 			{
-				methodModel.Step = methodModel.Step.ToLower();
+				methodModel.Step = methodModel.Step.Trim().ToLower();
 			}
 			if (NewRecipe)
 			{

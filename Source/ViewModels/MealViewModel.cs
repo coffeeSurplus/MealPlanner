@@ -131,7 +131,7 @@ internal class MealViewModel : MVVMBase
 	{
 		if (CheckMealValues())
 		{
-			currentMeal.Title = CurrentMealTitle.ToLower();
+			currentMeal.Title = CurrentMealTitle.Trim().ToLower();
 			currentMeal.Date = DateOnly.Parse(CurrentMealDate);
 			currentMeal.Category = (MealCategory)CurrentMealCategory;
 			if (newMeal)
@@ -147,8 +147,8 @@ internal class MealViewModel : MVVMBase
 	{
 		if (CheckIngredientValues())
 		{
-			currentIngredient.Title = CurrentIngredientTitle.ToLower();
-			currentIngredient.Quantity = !string.IsNullOrWhiteSpace(CurrentIngredientQuantity) ? CurrentIngredientQuantity.ToLower() : null;
+			currentIngredient.Title = CurrentIngredientTitle.Trim().ToLower();
+			currentIngredient.Quantity = !string.IsNullOrWhiteSpace(CurrentIngredientQuantity) ? CurrentIngredientQuantity.Trim().ToLower() : null;
 			if (newIngredient)
 			{
 				currentMeal.Ingredients.Add(currentIngredient);

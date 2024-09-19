@@ -126,8 +126,8 @@ internal class ShoppingViewModel : MVVMBase
 	{
 		if (CheckShoppingValues())
 		{
-			currentShopping.Title = CurrentShoppingTitle.ToLower();
-			currentShopping.Quantity = CurrentShoppingQuantity.ToLower();
+			currentShopping.Title = CurrentShoppingTitle.Trim().ToLower();
+			currentShopping.Quantity = CurrentShoppingQuantity.Trim().ToLower();
 			currentShopping.Cost = double.Parse(CurrentShoppingCost);
 			currentShopping.Category = (ShoppingCategory)CurrentShoppingCategory;
 			if (newShopping)
