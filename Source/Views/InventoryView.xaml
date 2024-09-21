@@ -38,7 +38,7 @@
 												<ColumnDefinition Width="30"/>
 												<ColumnDefinition Width="30"/>
 											</Grid.ColumnDefinitions>
-											<UniformGrid Grid.Column="0" Rows="2">
+											<UniformGrid Grid.Column="0" Grid.ColumnSpan="3" Rows="2">
 												<TextBlock Style="{StaticResource ResourceKey=Title}">
 													<TextBlock.Text>
 														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
@@ -86,7 +86,7 @@
 												<ColumnDefinition Width="30"/>
 												<ColumnDefinition Width="30"/>
 											</Grid.ColumnDefinitions>
-											<UniformGrid Grid.Column="0" Rows="2">
+											<UniformGrid Grid.Column="0" Grid.ColumnSpan="3" Rows="2">
 												<TextBlock Style="{StaticResource ResourceKey=Title}">
 													<TextBlock.Text>
 														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">
@@ -141,7 +141,7 @@
 												<ColumnDefinition Width="30"/>
 												<ColumnDefinition Width="30"/>
 											</Grid.ColumnDefinitions>
-											<UniformGrid Grid.Column="0" Rows="2">
+											<UniformGrid Grid.Column="0" Grid.ColumnSpan="3" Rows="2">
 												<TextBlock Style="{StaticResource ResourceKey=Title}">
 													<TextBlock.Text>
 														<MultiBinding Converter="{StaticResource ResourceKey=InventoryTitleText}">

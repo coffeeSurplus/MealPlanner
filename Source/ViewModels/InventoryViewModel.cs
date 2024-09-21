@@ -140,6 +140,7 @@ internal class InventoryViewModel : MVVMBase
 		CurrentInventoryTitle = string.Empty;
 		CurrentInventoryQuantity = string.Empty;
 		CurrentInventoryExpiryDate = string.Empty;
+		CurrentInventoryNoExpiry = false;
 		CurrentInventoryCategory = 1;
 		CurrentInventoryOpened = false;
 		InventoryEditorVisible = true;
