@@ -20,5 +20,5 @@ internal class MealCollectionView : CollectionViewBase<MealModel>
 		CollectionView.GroupDescriptions.Add(new PropertyGroupDescription(dayView ? "Category" : "Date", dayView ? new CollectionViewEnumConverter() : new CollectionViewMealDateConverter()));
 	}
 
-	protected override bool Filter(object parameter) => parameter is MealModel mealModel && (dayView ? mealModel.Date.ToRelativeDays() is 0 : mealModel.Date.FirstDayOfWeek().ToRelativeWeeks() == week);
+	protected override bool Filter(object parameter) => parameter is MealModel mealModel && (dayView ? mealModel.Date.ToRelativeDays() is 0 : mealModel.Date.FirstDayOfWeek().ToRelativeWeeks() == week && mealModel.Date.ToRelativeDays() is >= 0);
 }

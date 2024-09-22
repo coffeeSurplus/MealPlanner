@@ -114,7 +114,7 @@ internal class MealViewModel : MVVMBase
 		RemoveMealCommand = new(RemoveMeal);
 		EditIngredientCommand = new(EditIngredient);
 		RemoveIngredientCommand = new(RemoveIngredient);
-		UpdateView();
+		UpdateData();
 	}
 
 	private void NewMeal()
@@ -231,10 +231,6 @@ internal class MealViewModel : MVVMBase
 	{
 		mealList.RemoveAll(x => x.Date.ToRelativeDays() is < 0 || x.Date.FirstDayOfWeek().ToRelativeWeeks() is not 0 and not 1);
 		dataManager.UpdateData();
-		UpdateView();
-	}
-	private void UpdateView()
-	{
 		MealTodayCollectionView.UpdateView();
 		MealThisWeekCollectionView.UpdateView();
 		MealNextWeekCollectionView.UpdateView();
