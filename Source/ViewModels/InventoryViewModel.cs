@@ -169,7 +169,7 @@ internal class InventoryViewModel : MVVMBase
 		currentInventory = parameter;
 		CurrentInventoryTitle = currentInventory.Title;
 		CurrentInventoryQuantity = currentInventory.Quantity;
-		CurrentInventoryExpiryDate = currentInventory.ExpiryDate != DateOnly.MaxValue ? $"{currentInventory.ExpiryDate:d/M}" : string.Empty;
+		CurrentInventoryExpiryDate = currentInventory.ExpiryDate != DateOnly.MaxValue ? currentInventory.ExpiryDate.Year == DateOnly.FromDateTime(DateTime.Today).Year ? $"{currentInventory.ExpiryDate:d/M}" : $"{currentInventory.ExpiryDate:d/M/yy}" : string.Empty;
 		CurrentInventoryNoExpiry = currentInventory.ExpiryDate == DateOnly.MaxValue;
 		CurrentInventoryCategory = (int)currentInventory.Category;
 		CurrentInventoryOpened = currentInventory.Opened;
