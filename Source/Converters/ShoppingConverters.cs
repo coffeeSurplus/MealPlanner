@@ -1,9 +1,22 @@
 ﻿using MealPlanner.Source.Models;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace MealPlanner.Source.Converters;
+
+internal class ShoppingBoughtForegroundConverter : IValueConverter
+{
+	public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => Application.Current.FindResource((bool)value ? "Dark" : "Accent3");
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => Binding.DoNothing;
+}
+
+internal class ShoppingBoughtTextDecorationsConverter : IValueConverter
+{
+	public object? Convert(object value, Type targetType, object parameter, CultureInfo culture) => (bool)value ? TextDecorations.Strikethrough : null;
+	public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => Binding.DoNothing;
+}
 
 internal class ShoppingCostConverter : IValueConverter
 {

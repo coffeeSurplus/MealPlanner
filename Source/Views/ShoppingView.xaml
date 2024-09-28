@@ -38,7 +38,7 @@
 												<ColumnDefinition Width="30"/>
 											</Grid.ColumnDefinitions>
 											<CheckBox Grid.Column="0" Style="{StaticResource ResourceKey=CheckButton}" IsChecked="{Binding Path=Bought}" Command="{Binding Path=DataContext.UpdateDataCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"/>
-											<TextBlock Grid.Column="1" Style="{StaticResource ResourceKey=Title}">
+											<TextBlock Grid.Column="1" Style="{StaticResource ResourceKey=Title}" Foreground="{Binding Path=Bought, Converter={StaticResource ResourceKey=ShoppingBoughtForeground}}" TextDecorations="{Binding Path=Bought, Converter={StaticResource ResourceKey=ShoppingBoughtTextDecorations}}">
 												<TextBlock.Text>
 													<MultiBinding Converter="{StaticResource ResourceKey=ShoppingTitleText}">
 														<Binding Path="Title"/>

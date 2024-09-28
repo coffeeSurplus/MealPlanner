@@ -25,6 +25,8 @@
 	<converter:RecipePanelVisibilityConverter x:Key="RecipePanelVisibility"/>
 	<converter:RecipeSubtitleTextConverter x:Key="RecipeSubtitleText"/>
 	<converter:RecipeTimeTextConverter x:Key="RecipeTimeText"/>
+	<converter:ShoppingBoughtForegroundConverter x:Key="ShoppingBoughtForeground"/>
+	<converter:ShoppingBoughtTextDecorationsConverter x:Key="ShoppingBoughtTextDecorations"/>
 	<converter:ShoppingCostConverter x:Key="ShoppingCost"/>
 	<converter:ShoppingCountConverter x:Key="ShoppingCount"/>
 	<converter:ShoppingSubitleTextConverter x:Key="ShoppingSubtitleText"/>

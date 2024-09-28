@@ -17,6 +17,7 @@ internal class ShoppingCollectionView(List<ShoppingModel> list) : CollectionView
 			CollectionView.GroupDescriptions.Add(new PropertyGroupDescription("Category", new CollectionViewEnumConverter()));
 		}
 		CollectionView.SortDescriptions.Clear();
+		CollectionView.SortDescriptions.Add(new("Bought", ListSortDirection.Ascending));
 		CollectionView.SortDescriptions.Add(new(sortMode ? "Category" : "Cost", orderMode ? ListSortDirection.Ascending : ListSortDirection.Descending));
 		CollectionView.SortDescriptions.Add(new("Title", orderMode ? ListSortDirection.Ascending : ListSortDirection.Descending));
 		this.showBought = showBought;
